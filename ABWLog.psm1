@@ -184,7 +184,7 @@ class ABWEvent {
         if ($this.Category -eq [ABWEventCategory]::Milestone) {
             $private:str = "$Seperator`n$($this.Message)`n$Seperator`n"
         } else {
-            $private:str = "$($this.DateTime.ToString("g"))$(" $(if(-not $this.Category -eq [ABWEventCategory]::Unspecified){"$($this.Category)".PadRight(14)}): ")$($this.Message)`n"
+            $private:str = "$($this.DateTime.ToString("g"))$(" $(if(-not $this.Category -eq [ABWEventCategory]::Unspecified){"$($this.Category)"})".PadRight(14)): $($this.Message)`n"
         }
         return $str
     }

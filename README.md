@@ -36,7 +36,7 @@ DateTime               Category Message                                EventErro
 By default this writes to an automatically-generated filename under the working directory (but can be customised by setting the `StreamFile` property). Log files look like the below:
 ```
 PS /Users/alex/scripts> Get-Content $log.StreamFile
-17/4/20 10:12 am : This event will appear in the logfile.
+17/4/20 10:12 am              : This event will appear in the logfile.
 ```
 ## Categories
 That whitespace in the file output is to allow some room to write the event categories. The following categories are defined by the module:
@@ -90,8 +90,8 @@ PS /Users/alex/scripts> $log.ConvertToString()
 ----------
 The script is starting!
 ----------
- 17/4/20 10:16 am Warning       : We're about to see an error!
- 17/4/20 10:16 am Error         : The file '/Users/alex/scripts' already exists.
+ 17/4/20 10:16 am Warning      : We're about to see an error!
+ 17/4/20 10:16 am Error        : The file '/Users/alex/scripts' already exists.
 ```
 (By the way, "Milestone" category events are meant to break up text log files and are outputted as headers as above.)
 
@@ -146,10 +146,10 @@ DateTime               Category Message              EventError
 17/4/20 10:22:49 am Unspecified This is not an error 
 
 PS /Users/alex/scripts> Get-Content ./Errors.log
-17/4/20 10:23 am Error         : This is an error
+17/4/20 10:23 am Error        : This is an error
 
 PS /Users/alex/scripts> Get-Content ./EverythingElse.log
-17/4/20 10:23 am : This is not an error
+17/4/20 10:23 am              : This is not an error
 ```
 
 ## Quiet, please!
