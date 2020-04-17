@@ -14,7 +14,7 @@ To get started, all I need to do is create a new log object and add an event to 
  --------               -------- -------                          ----------
  17/4/20 10:09:45 am Unspecified This is the best log event ever!
 ```
-By default, new log events are sent to a buffer which can be accessed using the Events() method:
+New log events are sent to a buffer which can be accessed using the `Events()` method:
 ```
 PS /Users/alex/scripts> $log.Events()
 
@@ -24,7 +24,7 @@ DateTime              Category Message                       
 ```
 ## File streaming
 
-If I want to buffer to a file as well, I just call StartLogFileStream():
+If I want to buffer to a file as well, I just call `StartLogFileStream()`:
 ```
 PS /Users/alex/scripts> $log.StartLogFileStream()
 PS /Users/alex/scripts> $log.AddEvent("This event will appear in the logfile.")
@@ -33,7 +33,7 @@ DateTime               Category Message                                EventErro
 --------               -------- -------                                ----------
 17/4/20 10:12:54 am Unspecified This event will appear in the logfile. 
 ```
-By default this writes to an automatically-generated filename under the working directory (but can be customised by setting the StreamFile property). Log files look like the below:
+By default this writes to an automatically-generated filename under the working directory (but can be customised by setting the `StreamFile` property). Log files look like the below:
 ```
 PS /Users/alex/scripts> Get-Content $log.StreamFile
 17/4/20 10:12 am : This event will appear in the logfile.
@@ -66,9 +66,9 @@ DateTime             Category Message                                        Eve
 17/4/20 10:15:11 am     Error The file '/Users/alex/scripts' already exists. The file '/Users/alex/scripts' already exists.
 ```
 ## Errors
-Notice how when we supplied an ErrorRecord above, a couple of things happened. Firstly the event category was set to Error automatically. You can override this by specifying it when you AddLog().
-Secondly, the Message property was set to the ErrorRecord's exception message. Again, this can be overridden if you specify a message in AddLog().
-Finally, the EventError property is populated. This looks like it might be a duplicate of the Message field, but it's actually storing the ErrorRecord itself. This can be useful if you want to pull exception details out of a log entry when debugging after the fact:
+Notice how when we supplied an ErrorRecord above, a couple of things happened. Firstly the event category was set to "Error" automatically. You can override this by specifying it when you `AddLog()`.
+Secondly, the Message property was set to the ErrorRecord's exception message. Again, this can be overridden if you specify a message in `AddLog()`.
+Finally, the EventError property is populated. At first glance this looks like a duplicate of the Message field, but rather than being a string it's actually storing the ErrorRecord itself. This can be useful if you want to pull exception details out of a log entry when debugging after the fact:
 ```
 PS /Users/alex/scripts> $log.Events()[2].EventError.GetType()
                                                                                  
@@ -84,7 +84,7 @@ PS /Users/alex/scripts> $log.Events()[2].EventError.Exception.StackTrace
    at Microsoft.PowerShell.Commands.FileSystemProvider.NewItem(String path, String type, Object value)
 ```
 ## Exporting events to other formats
-Using the ConvertToString() method shows exactly the same text as would be streamed to a log file:
+Using the `ConvertToString()` method shows exactly the same text as would be streamed to a log file:
 ```
 PS /Users/alex/scripts> $log.ConvertToString()
 ----------
@@ -95,7 +95,8 @@ The script is starting!
 ```
 (By the way, "Milestone" category events are meant to break up text log files and are outputted as headers as above.)
 
-There's also ConvertToJson(), ConvertToCsv() and ConvertToHtml() which output to those formats. JSON in particular is great for detail as it includes the entire ErrorRecord object.
+There's also `ConvertToJson()`, `ConvertToCsv()` and `ConvertToHtml()` which output to those formats. JSON in particular is great for detail as it includes the entire ErrorRecord object.
+
 ## Event-based processing of... (log) events
 Say I need to some custom event handling that the module can't handle by itself. This can be achieved through raising PowerShell events to the queue whenever a log entry is added:
 ```
@@ -118,7 +119,8 @@ SourceIdentifier : ABWLog.AlexLog.Event_Added
 TimeGenerated    : 17/4/20 10:20:22 am
 MessageData      : {Event, Log}
 ```
-The event will be raised with a SourceIdentifier of "ABWLog.{Log Identifier}.Event_Added" and contains a hashtable of the entire log object along with the event that was just raised.
+The event will be raised with a SourceIdentifier of `ABWLog.{Log Identifier}.Event_Added` and contains a hashtable of the entire log object along with the event that was just raised.
+
 In the below example, I will subscribe to this event, and use a custom ScriptBlock to send log events to different logfiles based on their category:
 ```
 PS /Users/alex/scripts> Register-EngineEvent -SourceIdentifier "ABWLog.AlexLog.Event_Added" -Action {
@@ -151,7 +153,7 @@ PS /Users/alex/scripts> Get-Content ./EverythingElse.log
 ```
 
 ## Quiet, please!
-By default AddLog() will return the actual event object that was added. To suppress this, set the Quiet property:
+By default `AddLog()` will return the actual event object that was added. To suppress this, set the `Quiet` property:
 ```
 PS /Users/alex/scripts> $log.AddEvent("This event is loud!")
 
@@ -164,7 +166,7 @@ PS /Users/alex/scripts> $log.AddEvent("This event is quiet...")
 PS /Users/alex/scripts> 
 ```
 ## Working with Event objects
-You can instantiate event objects manually if you desire:
+You can instantiate event objects manually if you want:
 ```
 PS /Users/alex/scripts> $evt = [ABWEvent]::new(
 >>     [ABWEventCategory]::Debug,
@@ -178,7 +180,7 @@ DateTime            Category Message                     EventError
 17/4/20 10:30:54 am    Debug Look dad I'm scripting now! 
 
 ```
-Event objects can be added to a log using AddLog(). This lets you do things like copying from one log to another, or adding the same event object to multiple logs.
+Event objects can be added to a log using `AddLog()`. This lets you do things like copying from one log to another, or adding the same event object to multiple logs.
 ```
 PS /Users/alex/scripts> $(                         
 >>     $log1.AddEvent($evt)          
